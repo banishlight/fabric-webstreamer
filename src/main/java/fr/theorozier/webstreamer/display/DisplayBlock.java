@@ -2,7 +2,8 @@ package fr.theorozier.webstreamer.display;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.enums.BlockFace;
+// import net.minecraft.block.enums.BlockFace; // Not available in 1.20.1
+import net.minecraft.util.math.Direction; // A replacement for BlockFace
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.BlockSoundGroup;
@@ -14,7 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+// import net.minecraft.util.math.Direction; // Unused?
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -22,14 +23,16 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.mojang.serialization.MapCodec;
+// import com.mojang.serialization.MapCodec; // Old
 
 public class DisplayBlock extends BlockWithEntity {
 
-    public static final MapCodec<DisplayBlock> CODEC = DisplayBlock.createCodec(DisplayBlock::new);
+    // public static final MapCodec<DisplayBlock> CODEC = DisplayBlock.createCodec(DisplayBlock::new); // Old
+
 
     public static final DirectionProperty PROP_FACING = Properties.HORIZONTAL_FACING;
-    public static final EnumProperty<BlockFace> PROP_ATTACHMENT = EnumProperty.of("attachment", BlockFace.class, BlockFace.WALL, BlockFace.FLOOR, BlockFace.CEILING);
+    // public static final EnumProperty<BlockFace> PROP_ATTACHMENT = EnumProperty.of("attachment", BlockFace.class, BlockFace.WALL, BlockFace.FLOOR, BlockFace.CEILING); // Old
+    public static final EnumProperty<Direction> PROP_ATTACHMENT = EnumProperty.of("attachment", Direction.class, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.UP, Direction.DOWN);
 
     private static final VoxelShape SHAPE_NORTH = VoxelShapes.cuboid(0, 0, 0.9, 1, 1, 1);
     private static final VoxelShape SHAPE_SOUTH = VoxelShapes.cuboid(0, 0, 0, 1, 1, 0.1);
@@ -78,15 +81,18 @@ public class DisplayBlock extends BlockWithEntity {
         }
 
         Direction dir = ctx.getSide();
-        BlockFace face = BlockFace.WALL;
+        // BlockFace face = BlockFace.WALL; // Old
+        Direction face = dir;
 
+        /* 
         if (dir == Direction.DOWN) {
             face = BlockFace.CEILING;
         } else if (dir == Direction.UP) {
             face = BlockFace.FLOOR;
         }
-
-        if (face != BlockFace.WALL) {
+        */
+        
+        if (face != Direction.NORTH && face != Direction.SOUTH && face != Direction.EAST && face != Direction.WEST) {
             dir = ctx.getHorizontalPlayerFacing().getOpposite();
         }
 
@@ -99,15 +105,15 @@ public class DisplayBlock extends BlockWithEntity {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return switch (state.get(PROP_ATTACHMENT)) {
-            case WALL -> switch (state.get(PROP_FACING)) {
+            case NORTH, SOUTH, EAST, WEST -> switch (state.get(PROP_FACING)) {
                 case NORTH -> SHAPE_NORTH;
                 case SOUTH -> SHAPE_SOUTH;
                 case EAST -> SHAPE_EAST;
                 case WEST -> SHAPE_WEST;
                 default -> null;
             };
-            case FLOOR -> SHAPE_FLOOR;
-            case CEILING -> SHAPE_CEILING;
+            case DOWN -> SHAPE_FLOOR;
+            case UP -> SHAPE_CEILING;
         };
     }
 
@@ -134,9 +140,9 @@ public class DisplayBlock extends BlockWithEntity {
         return player.hasPermissionLevel(2);
     }
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
+    // @Override // Old
+    // protected MapCodec<? extends BlockWithEntity> getCodec() {
+    //     return CODEC;
+    // }
 
 }

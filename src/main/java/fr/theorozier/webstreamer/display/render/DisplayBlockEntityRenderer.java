@@ -7,7 +7,8 @@ import fr.theorozier.webstreamer.display.DisplayBlockEntity;
 import fr.theorozier.webstreamer.mixin.WorldRendererInvoker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.enums.BlockFace;
+// import net.minecraft.block.enums.BlockFace; // Old
+import net.minecraft.util.math.Direction; // A replacement for BlockFace
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.font.TextRenderer.TextLayerType;
@@ -22,7 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+// import net.minecraft.util.math.Direction; // Unused?
 import net.minecraft.util.shape.VoxelShape;
 
 import org.joml.AxisAngle4d;
@@ -97,15 +98,16 @@ public class DisplayBlockEntityRenderer implements BlockEntityRenderer<DisplayBl
             
         }
 
-        BlockFace attachment = entity.getCachedState().get(DisplayBlock.PROP_ATTACHMENT);
+        // BlockFace attachment = entity.getCachedState().get(DisplayBlock.PROP_ATTACHMENT);
+        Direction attachment = entity.getCachedState().get(DisplayBlock.PROP_ATTACHMENT);
         Direction facing = entity.getCachedState().get(DisplayBlock.PROP_FACING);
 
         matrices.push();
 
         switch (attachment) {
-            case WALL -> matrices.translate(0.5f - facing.getOffsetX(), 0.5f, 0.5f - facing.getOffsetZ());
-            case FLOOR -> matrices.translate(0.5f, -0.5f, 0.5f);
-            case CEILING -> matrices.translate(0.5f, 1.5f, 0.5f);
+            case NORTH, EAST, SOUTH, WEST -> matrices.translate(0.5f - facing.getOffsetX(), 0.5f, 0.5f - facing.getOffsetZ());
+            case DOWN -> matrices.translate(0.5f, -0.5f, 0.5f); // Previously FLOOR
+            case UP -> matrices.translate(0.5f, 1.5f, 0.5f); // Previously CEILING
         }
 
         switch (facing) {
@@ -117,9 +119,9 @@ public class DisplayBlockEntityRenderer implements BlockEntityRenderer<DisplayBl
         }
 
         switch (attachment) {
-            case WALL -> {}
-            case FLOOR -> matrices.multiply(ROTATE_FLOOR);
-            case CEILING -> matrices.multiply(ROTATE_CEILING);
+            case NORTH, EAST, SOUTH, WEST -> {}
+            case DOWN -> matrices.multiply(ROTATE_FLOOR); // Previously FLOOR
+            case UP -> matrices.multiply(ROTATE_CEILING); // Previously CEILING
         }
 
         if (uri != null) {
