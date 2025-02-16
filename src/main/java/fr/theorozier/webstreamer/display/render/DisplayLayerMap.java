@@ -1,8 +1,8 @@
 package fr.theorozier.webstreamer.display.render;
 
-import fr.theorozier.webstreamer.WebStreamerMod;
-import fr.theorozier.webstreamer.display.render.DisplayLayer;
-import fr.theorozier.webstreamer.display.render.DisplayLayerNode;
+// import fr.theorozier.webstreamer.WebStreamerMod; // Unused
+// import fr.theorozier.webstreamer.display.render.DisplayLayer; // Unused
+// import fr.theorozier.webstreamer.display.render.DisplayLayerNode; // Unused
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

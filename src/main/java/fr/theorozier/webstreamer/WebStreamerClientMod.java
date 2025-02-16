@@ -7,7 +7,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+// import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry; // Old
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.render.RenderLayer;
 import org.bytedeco.ffmpeg.global.avutil;
 import org.bytedeco.javacv.FFmpegLogCallback;
@@ -21,7 +22,8 @@ public class WebStreamerClientMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
 
-        BlockEntityRendererRegistry.register(WebStreamerMod.DISPLAY_BLOCK_ENTITY, DisplayBlockEntityRenderer::new);
+        // BlockEntityRendererRegistry.register(WebStreamerMod.DISPLAY_BLOCK_ENTITY, DisplayBlockEntityRenderer::new);
+        BlockEntityRendererFactories.register(WebStreamerMod.DISPLAY_BLOCK_ENTITY, DisplayBlockEntityRenderer::new);
         BlockRenderLayerMap.INSTANCE.putBlock(WebStreamerMod.DISPLAY_BLOCK, RenderLayer.getCutout());
     
         DISPLAY_LAYERS = new DisplayLayerManager();
