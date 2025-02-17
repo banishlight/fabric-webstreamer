@@ -106,8 +106,8 @@ public class DisplayBlockEntityRenderer implements BlockEntityRenderer<DisplayBl
 
         switch (attachment) {
             case NORTH, EAST, SOUTH, WEST -> matrices.translate(0.5f - facing.getOffsetX(), 0.5f, 0.5f - facing.getOffsetZ());
-            case DOWN -> matrices.translate(0.5f, -0.5f, 0.5f); // Previously FLOOR
-            case UP -> matrices.translate(0.5f, 1.5f, 0.5f); // Previously CEILING
+            case UP -> matrices.translate(0.5f, -0.5f, 0.5f); // Previously FLOOR
+            case DOWN -> matrices.translate(0.5f, 1.5f, 0.5f); // Previously CEILING
         }
 
         switch (facing) {
@@ -120,8 +120,8 @@ public class DisplayBlockEntityRenderer implements BlockEntityRenderer<DisplayBl
 
         switch (attachment) {
             case NORTH, EAST, SOUTH, WEST -> {}
-            case DOWN -> matrices.multiply(ROTATE_FLOOR); // Previously FLOOR
-            case UP -> matrices.multiply(ROTATE_CEILING); // Previously CEILING
+            case UP -> matrices.multiply(ROTATE_FLOOR); // Previously FLOOR
+            case DOWN -> matrices.multiply(ROTATE_CEILING); // Previously CEILING
         }
 
         if (uri != null) {
